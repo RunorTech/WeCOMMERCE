@@ -28,26 +28,62 @@ const Form = ({ type }: { type: string }) => {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
-        // console.log(formData)
-        // const hello = "hello"
-        const stringifyFormData = JSON.stringify(formData)
 
-        try {
-            const response = await axios.post('http://localhost:3000/sign-up', stringifyFormData);
-            console.log( response);
-          } catch (error) {
-            console.error('Error:', error);
-          }
+        // FOR SIGN-UP FORM
+
+        if (type === "sign-Up") {
+
+            if (confirmPassword === password) {
+                const stringifyFormData = JSON.stringify(formData)
+                try {
+                    const response = await axios.post('http://localhost:8000/sign-up', stringifyFormData);
+                    if (response.data.name === "AppwriteException") {
+                        const errorMessage = response.data.response.message
+                        if (errorMessage.includes("Invalid `password` param")) {
+                            const customErrorMessage = "Password must be between 8 and 265 characters long, and should not be one of the commonly used password. ";
+                            alert(customErrorMessage)
+                        }
+                        if (errorMessage.includes("already exists ")) {
+                            const customErrorMessage = "Already have an account try Login";
+                            alert(customErrorMessage)
+                        }
+                        // console.log(errorMessage);
+                    } else {
+                        console.log(response.data);
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                alert("Password does not match, please check the password and try again")
+            }
+
+        }
+
+        //  FOR LOGIN FORM
+
+        if (type === "login") {
+            const stringifyFormData = JSON.stringify(formData)
+            try {
+                const response = await axios.post('http://localhost:8000/login', stringifyFormData);
+                console.log(response);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+
     }
 
 
     return (
         <form action="" onSubmit={handleSubmit}>
             <div className="grid gap-3">
-               {type === "login"|| type === "sign-Up" ? <div>
-                <CustomInput value={email} type="email" label="email" id="email" name='email' placeholder="Enter your email" onChange={handleInputChange} required="required" />
-                <CustomInput value={password} type="password" label="password" id="password" name='password' placeholder="Enter your password" onChange={handleInputChange} required="required" />
-               </div> : null }
+                {type === "login" || type === "sign-Up" ? <div>
+                    <CustomInput value={email} type="email" label="email" id="email" name='email' placeholder="Enter your email" onChange={handleInputChange} required="required" />
+                    <CustomInput value={password} type="password" label="password" id="password" name='password' placeholder="Enter your password" onChange={handleInputChange} required="required" />
+                </div> : null}
                 {type === "sign-Up" ?
                     <CustomInput value={confirmPassword} type="password" label="confirm password" id="confirm password" name='confirmPassword' placeholder=" Confirm password" onChange={handleInputChange} required="required" /> : null}
             </div>

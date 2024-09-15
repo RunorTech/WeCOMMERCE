@@ -51,3 +51,11 @@ const {
       console.log(error)
     }
   }
+
+
+
+
+//   if(errorMessage == "Invalid `password` param: Password must be between 8 and 265 characters long, and should not be one of the commonly used password."){
+//     const customErrorMessage = "Password must be between 8 and 265 characters long, and should not be one of the commonly used password. ";
+//     alert(customErrorMessage)
+// }
