@@ -1,13 +1,23 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from "path";
+import { fileURLToPath } from "url";
+import bodyParser from "body-parser";
+
+// Enable __dirname in ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
 const PORT = 3000 || process.env.PORT;
 
-const allowedOrigins = ['http://localhost:5173', 'https://we-commerce-delta.vercel.app'];
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+const allowedOrigins = ['http://localhost:5173', 'https://we-commerce-bay.vercel.app'];
 
 // Configure CORS
 app.use(cors({
@@ -21,6 +31,22 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle all other routes and return the React app's index.html
+// app.get("*", (req, res) => {
+//   // res.sendFile(path.join(__dirname, "../dist", "index.html"));
+// });
+
+app.post('/sign-up', (req, res) => {
+  // const { password, email } = req.body;
+  
+  // const recievedData = JSON.parse(req.body)
+  
+  const jsonKey = Object.keys(req.body)[0]; 
+  const jsonObject = JSON.parse(jsonKey);
+  console.log(jsonObject);
+  // res.json({ message: 'Data received successfully', receivedData: req.body });
+});
 
 app.listen(PORT, () => {
   console.log(`Api Successfully started server on port ${PORT}.`);

@@ -4,6 +4,10 @@ import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
+declare type SignUpParams = {
+  email: string;
+  password: string;
+};
 
 const {
     APPWRITE_DATABASE_ID: DATABASE_ID,

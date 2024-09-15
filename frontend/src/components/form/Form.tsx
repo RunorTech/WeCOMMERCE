@@ -1,6 +1,7 @@
 // import React from 'react'
 import { Link } from "react-router-dom";
 import CustomInput from "./CustomInput";
+import axios from 'axios';
 
 import { FormEvent, useState } from "react"
 
@@ -25,9 +26,18 @@ const Form = ({ type }: { type: string }) => {
         })
     }
 
-    const handleSubmit = (event: FormEvent) => {
+    const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
         // console.log(formData)
+        // const hello = "hello"
+        const stringifyFormData = JSON.stringify(formData)
+
+        try {
+            const response = await axios.post('http://localhost:3000/sign-up', stringifyFormData);
+            console.log( response);
+          } catch (error) {
+            console.error('Error:', error);
+          }
     }
 
 
